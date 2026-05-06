@@ -35,19 +35,19 @@ export function Home() {
   return (
     <PageLayout>
       {/* Hero */}
-      <section className="relative min-h-[78vh] md:h-[88vh] md:min-h-[560px] w-full flex items-center justify-center overflow-hidden py-14 md:py-0">
+      <section className="relative h-[88vh] min-h-[560px] w-full flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${HERO_IMG})`
           }} />
         
-        <div className="absolute inset-0 bg-brown-dark/65" />
+        <div className="absolute inset-0 bg-brown-dark/70" />
         <div
           className="absolute inset-0"
           style={{
             background:
-            'radial-gradient(ellipse at center, transparent 30%, rgba(43,27,15,0.6) 100%)'
+            'radial-gradient(ellipse at center, transparent 28%, rgba(43,27,15,0.72) 100%)'
           }} />
         
 
@@ -64,7 +64,7 @@ export function Home() {
             duration: 1,
             ease: 'easeOut'
           }}
-          className="relative z-10 text-center px-4 sm:px-6 max-w-4xl">
+          className="relative z-10 text-center px-6 max-w-4xl">
           
           <div className="text-gold/90 mb-6 flex justify-center">
             <Ornament className="w-44 h-5" />
@@ -73,31 +73,32 @@ export function Home() {
             Quezon City · Est. 1952
           </p>
           <h1
-            className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-parchment-light leading-[1.08] sm:leading-[1.05] max-w-3xl mx-auto"
+            className="font-display text-4xl md:text-6xl lg:text-7xl text-parchment-light leading-[1.05] max-w-3xl mx-auto"
             style={{
-              fontWeight: 600
+              fontWeight: 600,
+              textShadow: '0 2px 16px rgba(0,0,0,0.45)'
             }}>
             
             San Antonio de Padua
-            <span className="block font-cormorant italic font-normal text-gold mt-2 text-2xl sm:text-3xl md:text-5xl">
+            <span className="block font-cormorant italic font-normal text-gold mt-2 text-3xl md:text-5xl" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.35)' }}>
               Parish History
             </span>
           </h1>
-          <p className="font-cormorant italic text-base sm:text-lg md:text-2xl text-parchment-light/95 mt-5 sm:mt-6 max-w-xl md:max-w-2xl mx-auto leading-relaxed px-1">
+          <p className="font-cormorant italic text-lg md:text-2xl text-parchment-light/95 mt-6 max-w-2xl mx-auto leading-relaxed" style={{ textShadow: '0 1px 10px rgba(0,0,0,0.35)' }}>
             A chronicle of faith, community, and tradition.
           </p>
 
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 max-w-md sm:max-w-none mx-auto">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/history"
-              className="group inline-flex justify-center items-center gap-2 px-8 py-3.5 bg-brown-dark border border-gold/60 text-parchment-light font-display tracking-[0.22em] sm:tracking-[0.25em] text-[11px] uppercase hover:bg-brown transition-colors shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] w-full sm:w-auto">
+              className="group inline-flex items-center gap-2 px-8 py-3.5 bg-brown-dark border border-gold/60 text-parchment-light font-display tracking-[0.25em] text-xs uppercase hover:bg-brown transition-colors shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)]">
               
               Explore History
               <ArrowRight className="w-4 h-4 text-gold group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to="/flipbook"
-              className="group inline-flex justify-center items-center gap-2 px-8 py-3.5 bg-transparent border border-gold/80 text-gold font-display tracking-[0.22em] sm:tracking-[0.25em] text-[11px] uppercase hover:bg-gold/10 transition-colors w-full sm:w-auto">
+              className="group inline-flex items-center gap-2 px-8 py-3.5 bg-transparent border border-gold/80 text-gold font-display tracking-[0.25em] text-xs uppercase hover:bg-gold/10 transition-colors">
               
               <BookOpen className="w-4 h-4" />
               Open Flipbook Archive
@@ -107,7 +108,7 @@ export function Home() {
       </section>
 
       {/* Welcome */}
-      <section className="px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-28 max-w-6xl mx-auto">
+      <section className="px-6 md:px-8 py-20 md:py-28 max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
           <motion.div
             initial={{
@@ -192,7 +193,7 @@ export function Home() {
       </section>
 
       {/* Featured cards */}
-      <section className="px-4 sm:px-6 md:px-8 py-16 sm:py-20 md:py-24 bg-beige/40 border-y border-brown/10">
+      <section className="px-6 md:px-8 py-20 md:py-24 bg-beige/40 border-y border-brown/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="font-display text-[11px] tracking-[0.4em] uppercase text-gold-dark mb-3">
@@ -262,7 +263,7 @@ export function Home() {
       </section>
 
       {/* Heritage quote */}
-      <section className="px-4 sm:px-6 md:px-8 py-20 sm:py-24 md:py-32 max-w-4xl mx-auto text-center">
+      <section className="px-6 md:px-8 py-24 md:py-32 max-w-4xl mx-auto text-center">
         <div className="text-gold flex justify-center mb-8">
           <Cross className="w-6 h-6" strokeWidth={1.5} />
         </div>
