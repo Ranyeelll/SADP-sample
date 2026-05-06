@@ -47,12 +47,12 @@ export function ChapterSidebar({
             duration: 0.4,
             ease: [0.32, 0.72, 0, 1]
           }}
-          className="parchment-bg fixed left-0 top-0 bottom-0 w-[88%] max-w-sm z-50 border-r-2 border-gold/40 flex flex-col">
+          className="parchment-bg fixed left-0 top-0 bottom-0 w-[90%] max-w-sm z-50 border-r-2 border-gold/40 flex flex-col overflow-y-auto">
           
-            <div className="flex items-center justify-between px-6 py-5 border-b border-brown/15">
+            <div className="flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 border-b border-brown/15 flex-shrink-0">
               <div className="flex items-center gap-2 text-brown-dark">
                 <BookMarked className="w-5 h-5 text-gold-dark" />
-                <span className="font-display tracking-[0.25em] uppercase text-xs">
+                <span className="font-display tracking-[0.22em] sm:tracking-[0.25em] uppercase text-[10px] sm:text-xs">
                   Table of Contents
                 </span>
               </div>
@@ -65,15 +65,15 @@ export function ChapterSidebar({
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto thin-scroll px-6 py-8">
+            <div className="flex-1 overflow-y-auto thin-scroll px-5 sm:px-6 py-6 sm:py-8">
               <div className="text-gold-dark mb-6 flex justify-center">
                 <Flourish className="w-24 h-5" />
               </div>
 
-              <h2 className="font-display text-2xl text-brown-dark text-center mb-2">
+              <h2 className="font-display text-xl sm:text-2xl text-brown-dark text-center mb-2 leading-tight">
                 History of the Church
               </h2>
-              <p className="font-cormorant italic text-center text-brown/70 text-sm mb-10">
+              <p className="font-cormorant italic text-center text-brown/70 text-sm mb-8 sm:mb-10">
                 Eight chapters across four eras
               </p>
 
@@ -91,13 +91,13 @@ export function ChapterSidebar({
                       
                         <div className="flex items-baseline gap-3">
                           <span
-                          className={`font-display text-xs tracking-[0.3em] ${active ? 'text-gold-dark' : 'text-brown/50'}`}>
+                          className={`font-display text-[10px] tracking-[0.24em] sm:tracking-[0.3em] ${active ? 'text-gold-dark' : 'text-brown/50'}`}>
                           
                             {String(idx + 1).padStart(2, '0')}
                           </span>
                           <div className="flex-1">
                             <div
-                            className={`font-display text-lg leading-tight ${active ? 'text-brown-dark' : 'text-brown'}`}>
+                            className={`font-display text-base sm:text-lg leading-tight ${active ? 'text-brown-dark' : 'text-brown'}`}>
                             
                               {section.title}
                             </div>
