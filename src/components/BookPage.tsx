@@ -1,4 +1,3 @@
-import React from 'react';
 import { Flourish } from './Ornament';
 import type { BookPage as BookPageType } from '../data/bookContent';
 const romanNumerals = [
