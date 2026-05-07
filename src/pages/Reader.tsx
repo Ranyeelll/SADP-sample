@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, Menu, ArrowLeft } from 'lucide-react';
 import { sections, allPages } from '../data/bookContent';
 import { ChapterSidebar } from '../components/ChapterSidebar';
 import { BookPageContent } from '../components/BookPage';
+
 export function Reader() {
   const { section: sectionParam } = useParams();
   const navigate = useNavigate();

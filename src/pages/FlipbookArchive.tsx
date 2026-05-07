@@ -12,7 +12,7 @@ export function FlipbookArchive() {
       <PageHero
         eyebrow="Optional Reading Module"
         title="Flipbook Archive"
-        subtitle="An immersive reading of compiled historical documents — turn each page as you would a printed book."
+        subtitle="A parish story of San Antonio de Padua — turn each page as you would a printed book."
       />
       
 
@@ -75,13 +75,13 @@ export function FlipbookArchive() {
                       textShadow: '0 1px 8px rgba(0,0,0,0.25)'
                     }}>
                     
-                    History of the Church
+                    San Antonio de Padua
                   </h3>
                   <div className="text-gold/80 mt-6 mb-6">
                     <Flourish className="w-20 h-4" />
                   </div>
                   <p className="font-cormorant italic text-parchment-light/70 text-sm">
-                    San Antonio de Padua Parish
+                    A story of parish beginnings, service, and faith
                   </p>
                 </div>
               </div>
@@ -120,15 +120,16 @@ export function FlipbookArchive() {
             </h2>
             <div className="font-body text-[1.1rem] text-charcoal leading-[1.8] space-y-4 mb-8">
               <p>
-                The Flipbook Archive gathers a compiled chronicle of the wider
-                history of the Catholic Church — from the apostolic age through
-                the present pilgrim Church — presented in the form of a digital
-                manuscript.
+                The Flipbook Archive gathers a parish chronicle of San Antonio
+                de Padua Parish — from its founding in 2011 through its growth
+                in prayer, service, and community life — presented in the form
+                of a digital manuscript.
               </p>
               <p>
-                Eight chapters across four eras invite slow, contemplative
-                reading: pages turn as they would in a hardbound volume, with
-                drop caps, ornaments, and roman-numeral pagination preserved.
+                Four chapters across the life of the parish invite slow,
+                contemplative reading: pages turn as they would in a hardbound
+                volume, with drop caps, ornaments, and roman-numeral
+                pagination preserved.
               </p>
             </div>
 
@@ -158,7 +159,7 @@ export function FlipbookArchive() {
                 fontWeight: 600
               }}>
               
-              Four Eras, Eight Chapters
+              Four Chapters, One Parish Story
             </h2>
             <div className="text-gold mt-5 flex justify-center">
               <Flourish className="w-24 h-4" />

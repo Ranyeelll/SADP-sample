@@ -146,23 +146,20 @@ export function Contact() {
             }}
             className="space-y-8">
             
-            {/* Stylized "map" / facade card */}
+            {/* Embedded Google Map (responsive) */}
             <div className="relative aspect-[4/3] overflow-hidden border-4 border-parchment-light shadow-[0_18px_36px_-14px_rgba(62,42,28,0.35)]">
-              <img
-                src="/San_Antonio_de_Padua_Parish_-_Batasan_Hills,_Quezon_City.jpg"
-                alt="San Antonio de Padua Parish facade"
-                className="w-full h-full object-cover" />
-              
-              <div className="absolute inset-0 bg-brown-dark/30" />
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-parchment-light">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gold" />
-                  <span className="font-display text-[10px] tracking-[0.3em] uppercase">
-                    Batasan Hills · Quezon City
-                  </span>
-                </div>
-                <span className="font-cormorant italic text-sm text-gold/90">
-                  View Location
+              <iframe
+                title="San Antonio de Padua Parish location"
+                src="https://www.google.com/maps?q=San+Antonio+de+Padua+Parish+Batasan+Hills+Quezon+City&output=embed"
+                className="w-full h-full border-0"
+                allowFullScreen
+                loading="lazy"
+              />
+
+              <div className="absolute bottom-4 left-4 flex items-center gap-2 text-parchment-light">
+                <MapPin className="w-4 h-4 text-gold" />
+                <span className="font-display text-[10px] tracking-[0.3em] uppercase">
+                  Batasan Hills · Quezon City
                 </span>
               </div>
             </div>

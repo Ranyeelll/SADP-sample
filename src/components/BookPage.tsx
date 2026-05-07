@@ -48,6 +48,16 @@ export function BookPageContent({ page, side, isFirstOfChapter }: Props) {
       }
 
       <div className="flex-1 overflow-hidden">
+        {page.image &&
+        <div className="mb-4 sm:mb-6">
+            <div className="overflow-hidden border border-brown/15 bg-white/40 shadow-[0_10px_22px_-12px_rgba(62,42,28,0.35)]">
+              <img
+              src={page.image}
+              alt={page.imageAlt || page.chapter}
+              className="w-full h-36 sm:h-44 md:h-48 object-cover" />
+            </div>
+          </div>
+        }
         <div className="font-body text-charcoal text-[1rem] sm:text-[1.05rem] md:text-[1.15rem] leading-[1.75] sm:leading-[1.8] space-y-3 sm:space-y-4 text-justify">
           {page.paragraphs.map((p, i) =>
           <p

@@ -24,7 +24,7 @@ export function About() {
               Established {establishedYear} · {parishAge} {parishAge === 1 ? 'year' : 'years'} as a Parish
             </p>
             <p className="font-body text-sm text-brown/60 mt-2">
-              Note: fiesta materials may reference the "15th" celebration; the parish was canonically erected in {establishedYear}.
+              Note: the parish was canonically erected by Decree 2011-276 on 13 June 2011 by Most Rev. Antonio R. Tobias, DD, for the Diocese of Novaliches. Fiesta materials may reference the "15th" celebration.
             </p>
           </div>
         );

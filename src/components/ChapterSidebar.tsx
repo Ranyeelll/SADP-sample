@@ -71,10 +71,10 @@ export function ChapterSidebar({
               </div>
 
               <h2 className="font-display text-xl sm:text-2xl text-brown-dark text-center mb-2 leading-tight">
-                History of the Church
+                San Antonio de Padua Parish
               </h2>
               <p className="font-cormorant italic text-center text-brown/70 text-sm mb-8 sm:mb-10">
-                Eight chapters across four eras
+                Four chapters across the life of the parish
               </p>
 
               <ul className="space-y-1">

@@ -9,27 +9,28 @@ const HERO_IMG = "/San_Antonio_de_Padua_Parish_-_Batasan_Hills,_Quezon_City.jpg"
 const WELCOME_IMG = "/San_Antonio_de_Padua_Parish_-_Batasan_Hills,_Quezon_City.jpg";
 
 const features = [
-{
-  icon: ScrollText,
-  title: 'Parish History',
-  desc: 'A structured chronicle of the founding, growth, and present life of our parish.',
-  to: '/history',
-  cta: 'Read the History'
-},
-{
-  icon: Clock,
-  title: 'Timeline of Events',
-  desc: 'Walk through the milestones that have shaped our community across the decades.',
-  to: '/timeline',
-  cta: 'View Timeline'
-},
-{
-  icon: BookOpen,
-  title: 'Flipbook Archive',
-  desc: 'An immersive digital book gathering compiled historical documents of the Church.',
-  to: '/flipbook',
-  cta: 'Open Archive'
-}];
+  {
+    icon: ScrollText,
+    title: 'Parish History',
+    desc: 'A structured chronicle of the founding, growth, and present life of our parish since 2011.',
+    to: '/history',
+    cta: 'Read the History'
+  },
+  {
+    icon: Clock,
+    title: 'Timeline of Events',
+    desc: 'Walk through the milestones that have shaped our community through the years.',
+    to: '/timeline',
+    cta: 'View Timeline'
+  },
+  {
+    icon: BookOpen,
+    title: 'Flipbook Archive',
+    desc: 'An immersive digital book gathering compiled historical documents of the Church.',
+    to: '/flipbook',
+    cta: 'Open Archive'
+  }
+];
 
 export function Home() {
   return (
@@ -143,10 +144,10 @@ export function Home() {
             </div>
             <div className="font-body text-[1.1rem] text-charcoal leading-[1.8] space-y-4">
               <p>
-                For more than seven decades, San Antonio de Padua Parish has
-                stood as a beacon of devotion in Quezon City — a place where
-                generations of families have gathered to worship, to mourn, to
-                celebrate, and to grow in the life of grace.
+                Since its establishment in 2011, San Antonio de Padua Parish
+                has stood as a beacon of devotion in Quezon City — a place
+                where generations of families have gathered to worship, to
+                mourn, to celebrate, and to grow in the life of grace.
               </p>
               <p>
                 This site is a humble chronicle of that long journey: the

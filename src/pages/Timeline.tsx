@@ -7,7 +7,7 @@ const events = [
 {
   year: '2011',
   title: 'Erection of the Parish',
-  desc: 'The Archdiocese of Manila formally erects San Antonio de Padua Parish. The first Mass is celebrated in a modest chapel by the founding pastor.',
+  desc: 'The Diocese of Novaliches formally erects San Antonio de Padua Parish by Decree 2011-276. The first Mass is celebrated in a modest chapel by the founding Parish Priest.',
   image:
   '/founding-of-parish.jpg'
 },

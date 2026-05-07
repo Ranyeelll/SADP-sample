@@ -10,11 +10,11 @@ const sections = [
   year: '2011',
   image:
   '/founding-of-parish.jpg',
-  caption: 'The original chapel, c. early 2010s.',
+  caption: 'The original chapel, established by Decree 2011-276 on 13 June 2011.',
   body: [
-  'The story of San Antonio de Padua Parish begins in Batasan, Quezon City — a growing community seeking a spiritual home. Families across the northern neighborhoods found themselves traveling long distances to attend Mass in distant parishes, and their faithful petitions reached the Archdiocese of Manila.',
-  'Responding to this call, the Archdiocese erected San Antonio de Padua Parish in 2011 under the patronage of Saint Anthony of Padua, the gentle Franciscan friar known to generations of Filipinos as the patron of the lost and the poor. Mass was first celebrated in a modest chapel, marking the beginning of a new chapter in the spiritual life of the community.',
-  'The founding pastor, together with a small council of lay leaders, set down the rhythms of parish life that endure to this day: daily Mass at dawn and in the evening, the weekly novena to San Antonio, and the careful instruction of children in the catechism. From this humble beginning, a community was born.'],
+  'The story of San Antonio de Padua Parish begins in Batasan, Quezon City — a growing community seeking a spiritual home. Families across the northern neighborhoods found themselves traveling long distances to attend Mass in distant parishes, and their faithful petitions reached the Diocese of Novaliches.',
+  'Responding to this call, the Diocese of Novaliches erected San Antonio de Padua Parish by Decree 2011-276, signed by Most Rev. Antonio R. Tobias, DD, and given in Fairview, Quezon City on 13 June 2011. The parish was established under the patronage of Saint Anthony of Padua, the gentle Franciscan friar known to generations of Filipinos as the patron of the lost and the poor. Mass was first celebrated in a modest chapel, marking the beginning of a new chapter in the spiritual life of the community.',
+  'The founding Parish Priest, together with a small council of lay leaders, set down the rhythms of parish life that endure to this day: daily Mass at dawn and in the evening, the weekly novena to San Antonio, and the careful instruction of children in the catechism. From this humble beginning, a community was born.'],
 
   pullQuote:
   '"In answer to the prayers of the faithful, a parish was born — and with it, a new home for the people of Batasan."'
@@ -27,7 +27,7 @@ const sections = [
   '/growth-of-community.jpg',
   caption: 'The expanding parish community.',
   body: [
-  'In the years following the parish\'s establishment, the small chapel could no longer accommodate the growing congregation of faithful. Recognizing this growth, the parish began planning for a permanent, more spacious church building to serve the community\'s sacramental and pastoral needs.',
+  'In the years following the parish\'s establishment in 2011, the small chapel could no longer accommodate the growing congregation of faithful. Recognizing this growth, the parish began planning for a permanent, more spacious church building to serve the community\'s sacramental and pastoral needs.',
   'During these formative years, the parish deepened its pastoral presence through the launch of lay ministries, Bible study circles, and prayer groups that took root in countless homes across Batasan. Catechetical programs expanded, the choir began to flourish, and community organizations such as the Knights of Columbus and Catholic Women\'s League found their home within the parish.',
   'The spirit of Vatican II animated our liturgy and pastoral approach, as the faithful grew in their understanding of the Church\'s mission and their role in building the Kingdom of God in their neighborhoods.']
 
