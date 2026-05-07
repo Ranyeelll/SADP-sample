@@ -13,9 +13,11 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-10 md:gap-8">
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full bg-brown border border-gold/50 flex items-center justify-center text-gold">
-                <Cross className="w-4 h-4" strokeWidth={2.2} />
-              </div>
+              <img 
+                src="/parish-logo.png" 
+                alt="San Antonio de Padua Parish Logo"
+                className="w-10 h-10 rounded-full object-cover border border-gold/50"
+              />
               <div className="leading-tight">
                 <div className="font-display text-xs tracking-[0.25em] uppercase text-parchment-light">
                   San Antonio de Padua
@@ -36,6 +38,14 @@ export function Footer() {
               Explore
             </h4>
             <ul className="space-y-2 font-body text-[15px]">
+              <li>
+                <Link
+                  to="/about"
+                  className="hover:text-parchment-light transition-colors">
+                  
+                  About
+                </Link>
+              </li>
               <li>
                 <Link
                   to="/history"

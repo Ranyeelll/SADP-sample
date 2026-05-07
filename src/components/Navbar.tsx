@@ -8,6 +8,10 @@ const links = [
     label: 'Home',
   },
   {
+    to: '/about',
+    label: 'About',
+  },
+  {
     to: '/history',
     label: 'History',
   },
@@ -54,16 +58,18 @@ export function Navbar() {
         className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled ? 'bg-parchment/95 backdrop-blur border-b border-brown/15 shadow-[0_2px_12px_-6px_rgba(62,42,28,0.25)]' : 'bg-parchment/80 backdrop-blur-sm border-b border-transparent'}`}
       >
         <div className="max-w-7xl mx-auto px-5 md:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-full bg-brown-dark border border-gold/60 flex items-center justify-center text-gold group-hover:bg-brown transition-colors">
-              <Cross className="w-4 h-4" strokeWidth={2.2} />
-            </div>
-            <div className="leading-tight">
-              <div className="font-display text-[11px] md:text-xs tracking-[0.3em] uppercase text-brown-dark">
+          <Link to="/" className="flex items-center gap-2 group">
+            <img 
+              src="/parish-logo.png" 
+              alt="San Antonio de Padua Parish Logo"
+              className="w-10 h-10 rounded-full object-cover border border-gold/40 group-hover:shadow-md transition-shadow"
+            />
+            <div className="leading-tight hidden sm:block">
+              <div className="font-display text-[10px] md:text-xs tracking-[0.3em] uppercase text-brown-dark">
                 San Antonio de Padua
               </div>
-              <div className="font-cormorant italic text-xs md:text-sm text-brown/80 -mt-0.5">
-                Parish · Quezon City
+              <div className="font-cormorant italic text-[10px] md:text-xs text-brown/80 -mt-0.5">
+                Parish
               </div>
             </div>
           </Link>

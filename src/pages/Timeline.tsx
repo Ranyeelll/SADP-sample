@@ -5,60 +5,51 @@ import { PageHero } from '../components/PageHero';
 import { Ornament } from '../components/Ornament';
 const events = [
 {
-  year: '1952',
+  year: '2011',
   title: 'Erection of the Parish',
-  desc: 'The Archdiocese of Manila formally erects San Antonio de Padua Parish, with the first Mass celebrated in a wooden chapel by the founding pastor.',
+  desc: 'The Archdiocese of Manila formally erects San Antonio de Padua Parish. The first Mass is celebrated in a modest chapel by the founding pastor.',
   image:
-  'https://images.unsplash.com/photo-1518972559570-7cc1309f3229?auto=format&fit=crop&w=900&q=80'
+  '/founding-of-parish.jpg'
 },
 {
-  year: '1958',
-  title: 'First Parish School',
-  desc: 'A small catechetical school opens beside the chapel, educating the first generation of children in the parish in the Christian doctrine.'
+  year: '2012',
+  title: 'Formation of Parish Organizations',
+  desc: 'Parish lay ministries and pastoral councils are established. Prayer groups and Bible study circles begin meeting in homes throughout Batasan.'
 },
 {
-  year: '1965',
-  title: 'Groundbreaking of the Church',
-  desc: 'After more than a decade of fundraising, ground is broken for a permanent church to replace the original chapel, with the cornerstone blessed by the Archbishop.',
-  image:
-  'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=900&q=80'
+  year: '2014',
+  title: 'Expansion of Catechetical Programs',
+  desc: 'The parish launches comprehensive religious education programs for children and adults, deepening faith formation in the community.'
 },
 {
-  year: '1968',
-  title: 'Solemn Blessing of the Church',
-  desc: 'The completed church is solemnly dedicated. Hundreds walk in procession from the old chapel to the new sanctuary carrying the image of San Antonio.'
+  year: '2016',
+  title: 'Establishment of Youth Ministry',
+  desc: 'A dedicated youth ministry is launched, empowering young people to lead retreats and outreach missions across Metro Manila.'
 },
 {
-  year: '1977',
-  title: 'Silver Jubilee',
-  desc: 'The parish celebrates twenty-five years of life with a thanksgiving Mass, a fluvial procession, and the planting of memorial trees in the churchyard.'
+  year: '2018',
+  title: 'Opening of Adoration Chapel',
+  desc: 'A perpetual adoration chapel is consecrated, providing a sacred space for contemplative prayer and intimate encounter with Christ.'
 },
 {
-  year: '1990',
-  title: 'Earthquake Relief',
-  desc: 'In the wake of the Luzon earthquake, the parish hall is converted into a relief center, organizing aid for the affected provinces of Central Luzon.'
-},
-{
-  year: '2002',
-  title: 'Golden Jubilee',
-  desc: 'A year of festivities marks fifty years of grace. A commemorative volume is published, gathering the recollections of long-time parishioners.',
-  image:
-  'https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=900&q=80'
-},
-{
-  year: '2008',
-  title: 'Restoration and Adoration Chapel',
-  desc: 'A major renovation restores the roof and narra interiors. A new perpetual adoration chapel is consecrated beside the sanctuary.'
+  year: '2019',
+  title: 'Community Outreach Initiatives',
+  desc: 'The parish establishes counseling, legal aid, and feeding programs serving the urban poor and marginalized in the parish boundaries.'
 },
 {
   year: '2020',
-  title: 'A Year Without Public Worship',
-  desc: 'During the global pandemic, the parish broadcasts daily Mass online and organizes drive-through communion, sustaining the community in unprecedented times.'
+  title: 'Pandemic Ministry',
+  desc: 'During the global pandemic, the parish broadcasts daily Mass online and organizes safe communion services, sustaining the community through unprecedented times.'
 },
 {
-  year: 'Today',
-  title: 'A Living Heritage',
-  desc: 'Now serving more than ten thousand registered families, the parish continues its mission of worship, formation, and outreach in the heart of Quezon City.',
+  year: '2023',
+  title: 'Parish Renovations',
+  desc: 'Major renovations and improvements to the church facilities are completed, enhancing the beauty and functionality of sacred spaces.'
+},
+{
+  year: '2026',
+  title: 'A Thriving Heritage',
+  desc: 'Now serving thousands of faithful families, San Antonio de Padua Parish continues its mission of worship, formation, and compassionate service in Batasan Hills, Quezon City.',
   image:
   'https://images.unsplash.com/photo-1490127252417-7c393f993ee4?auto=format&fit=crop&w=900&q=80'
 }];
@@ -69,16 +60,8 @@ export function Timeline() {
       <PageHero
         eyebrow="Through the Years"
         title="Timeline of Events"
-        subtitle="Seventy years of faith, walked one milestone at a time."
-        crumbs={[
-        {
-          label: 'Home',
-          to: '/'
-        },
-        {
-          label: 'Timeline'
-        }]
-        } />
+        subtitle="From 2011 to the present — milestones of faith and service."
+      />
       
 
       <div className="max-w-5xl mx-auto px-4 md:px-8 pb-24">

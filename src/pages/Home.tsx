@@ -70,7 +70,7 @@ export function Home() {
             <Ornament className="w-44 h-5" />
           </div>
           <p className="font-display text-xs md:text-sm tracking-[0.4em] uppercase text-gold mb-5">
-            Quezon City · Est. 1952
+            Quezon City · Est. 2011
           </p>
           <h1
             className="font-display text-4xl md:text-6xl lg:text-7xl text-parchment-light leading-[1.05] max-w-3xl mx-auto"
@@ -186,7 +186,7 @@ export function Home() {
               <p className="font-display text-[10px] tracking-[0.3em] uppercase text-gold">
                 Since
               </p>
-              <p className="font-display text-2xl mt-1">1952</p>
+              <p className="font-display text-2xl mt-1">2011</p>
             </div>
           </motion.div>
         </div>

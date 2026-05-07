@@ -30,15 +30,7 @@ export function Contact() {
         eyebrow="Reach the Parish"
         title="Contact & Visit"
         subtitle="Whether for the sacraments, an inquiry, or simply a quiet visit — our doors are open."
-        crumbs={[
-        {
-          label: 'Home',
-          to: '/'
-        },
-        {
-          label: 'Contact'
-        }]
-        } />
+      />
       
 
       <section className="max-w-6xl mx-auto px-6 md:px-8 pb-20">

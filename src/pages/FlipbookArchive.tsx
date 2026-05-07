@@ -13,15 +13,7 @@ export function FlipbookArchive() {
         eyebrow="Optional Reading Module"
         title="Flipbook Archive"
         subtitle="An immersive reading of compiled historical documents — turn each page as you would a printed book."
-        crumbs={[
-        {
-          label: 'Home',
-          to: '/'
-        },
-        {
-          label: 'Flipbook'
-        }]
-        } />
+      />
       
 
       {/* Closed book preview */}
