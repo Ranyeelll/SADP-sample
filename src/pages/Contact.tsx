@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Phone, Mail, Clock, Send, Cross } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, Cross, CheckCircle2, AlertCircle } from 'lucide-react';
 import { PageLayout } from '../components/PageLayout';
 import { PageHero } from '../components/PageHero';
 import { Ornament, Flourish } from '../components/Ornament';
@@ -24,6 +24,8 @@ const massSchedule = [
 
 export function Contact() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   return (
     <PageLayout>
       <PageHero
@@ -232,7 +234,7 @@ export function Contact() {
 
           {submitted ?
           <div className="page-bg border border-gold/40 p-10 text-center">
-              <Cross className="w-6 h-6 text-gold-dark mx-auto mb-3" />
+              <CheckCircle2 className="w-6 h-6 text-gold-dark mx-auto mb-3" />
               <h3
               className="font-display text-2xl text-brown-dark mb-2"
               style={{
@@ -248,9 +250,41 @@ export function Contact() {
             </div> :
 
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              setSubmitted(true);
+              setError('');
+              setSubmitting(true);
+
+              try {
+                const form = e.currentTarget;
+                const formData = new FormData(form);
+                const payload = {
+                  name: String(formData.get('name') ?? '').trim(),
+                  email: String(formData.get('email') ?? '').trim(),
+                  subject: String(formData.get('subject') ?? '').trim(),
+                  message: String(formData.get('message') ?? '').trim(),
+                };
+
+                const response = await fetch('/api/contact', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(payload),
+                });
+
+                if (!response.ok) {
+                  const data = await response.json().catch(() => null);
+                  throw new Error(data?.error ?? 'Failed to send your message.');
+                }
+
+                setSubmitted(true);
+                form.reset();
+              } catch (submitError) {
+                setError(submitError instanceof Error ? submitError.message : 'Failed to send your message.');
+              } finally {
+                setSubmitting(false);
+              }
             }}
             className="page-bg border border-brown/15 p-7 md:p-10 text-left space-y-5">
             
@@ -261,13 +295,20 @@ export function Contact() {
               <Field label="Subject" id="subject" required />
               <Field label="Message" id="message" textarea required />
 
+              {error ?
+              <div className="flex items-start gap-3 rounded border border-red-300/80 bg-red-50 px-4 py-3 text-red-900">
+                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                <p className="font-body text-sm leading-relaxed">{error}</p>
+              </div> : null}
+
               <div className="pt-2">
                 <button
                 type="submit"
+                disabled={submitting}
                 className="group inline-flex items-center gap-2 px-8 py-3.5 bg-brown-dark border border-gold/60 text-parchment-light font-display tracking-[0.25em] text-xs uppercase hover:bg-brown transition-colors">
                 
                   <Send className="w-4 h-4 text-gold" />
-                  Send Message
+                  {submitting ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
             </form>

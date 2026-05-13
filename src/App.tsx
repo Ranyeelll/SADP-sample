@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Home } from './pages/Home';
@@ -7,6 +6,7 @@ import { History } from './pages/History';
 import { Timeline } from './pages/Timeline';
 import { FlipbookArchive } from './pages/FlipbookArchive';
 import { Contact } from './pages/Contact';
+import { OfficeMessages } from './pages/OfficeMessages';
 import { Reader } from './pages/Reader';
 export function App() {
   return (
@@ -21,6 +21,7 @@ export function App() {
         <Route path="/flipbook/read" element={<Reader />} />
         <Route path="/flipbook/read/:section" element={<Reader />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/office/messages" element={<OfficeMessages />} />
       </Routes>
     </BrowserRouter>);
 
