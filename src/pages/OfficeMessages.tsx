@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { Lock, Mail, RefreshCw, ShieldAlert, CalendarDays, User } from 'lucide-react';
 
@@ -30,8 +31,62 @@ export function OfficeMessages() {
   const [error, setError] = useState('');
   const [authenticating, setAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
   const [lockoutRemainingSeconds, setLockoutRemainingSeconds] = useState(0);
+  const isLockoutActive = lockoutRemainingSeconds > 0;
   const LOCKOUT_STORAGE_KEY = 'sadp_office_lockout_until';
+
+  const activateLockout = (seconds: number) => {
+    const retryAfter = Math.max(1, Math.floor(seconds));
+    const until = Date.now() + retryAfter * 1000;
+
+    try {
+      localStorage.setItem(LOCKOUT_STORAGE_KEY, String(until));
+    } catch {
+      // ignore storage errors
+    }
+
+    setLockoutRemainingSeconds(retryAfter);
+    setFailedAttempts(3);
+    setError(`Too many failed attempts. Try again in ${formatCountdown(retryAfter)}.`);
+  };
+  const lockoutModal =
+    isLockoutActive && typeof document !== 'undefined'
+      ? createPortal(
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center px-4">
+            <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" aria-hidden="true" />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="office-lockout-title"
+              aria-describedby="office-lockout-description"
+              className="relative w-full max-w-md border border-red-200 bg-[#fff9f3] p-6 md:p-8 shadow-[0_24px_80px_-24px_rgba(0,0,0,0.55)]"
+            >
+              <p className="font-display text-[11px] tracking-[0.4em] uppercase text-red-700 mb-3">
+                Security Notice
+              </p>
+              <h2 id="office-lockout-title" className="font-display text-2xl text-brown-dark mb-3">
+                Try again later
+              </h2>
+              <p id="office-lockout-description" className="font-body text-charcoal leading-relaxed mb-5">
+                Too many failed attempts were detected. Please wait before entering the office access code again.
+              </p>
+              <div className="rounded border border-red-300 bg-red-50 px-4 py-3 text-red-900 text-center">
+                <span className="font-display text-[11px] tracking-[0.3em] uppercase block mb-1">
+                  Remaining time
+                </span>
+                <span className="font-display text-3xl tracking-[0.2em] text-red-800">
+                  {formatCountdown(lockoutRemainingSeconds)}
+                </span>
+              </div>
+              <p className="mt-4 text-center font-cormorant italic text-charcoal">
+                You can try again when the timer reaches zero.
+              </p>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
 
   // Load persisted lockout expiry on mount so countdown survives reloads
   useEffect(() => {
@@ -49,7 +104,7 @@ export function OfficeMessages() {
   }, []);
 
   useEffect(() => {
-    if (!lockoutRemainingSeconds) {
+    if (!isLockoutActive) {
       try {
         localStorage.removeItem(LOCKOUT_STORAGE_KEY);
       } catch {}
@@ -63,7 +118,20 @@ export function OfficeMessages() {
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [lockoutRemainingSeconds]);
+  }, [isLockoutActive, lockoutRemainingSeconds]);
+
+  useEffect(() => {
+    if (!isLockoutActive) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isLockoutActive]);
 
   const formattedMessages = useMemo(
     () =>
@@ -133,20 +201,38 @@ export function OfficeMessages() {
       });
 
       if (response.status === 401) {
-        throw new Error('Invalid office access code.');
+        setFailedAttempts((currentAttempts) => {
+          const nextAttempts = currentAttempts + 1;
+
+          if (nextAttempts >= 3) {
+            activateLockout(3 * 60);
+          } else {
+            setError('Invalid office access code.');
+          }
+
+          return nextAttempts;
+        });
+        return;
       }
 
       if (response.status === 429) {
+        // Prefer explicit JSON field, but fall back to Retry-After header if needed.
+        // If neither is present, still show the modal using the known 3-minute lockout window.
         const data = (await response.json().catch(() => ({}))) as OfficeLoginErrorResponse;
-        const retryAfter = Number(data.retryAfterSeconds || 0);
+        let retryAfter = Number(data.retryAfterSeconds || 0);
+
+        if (!retryAfter) {
+          const header = response.headers.get('Retry-After');
+          retryAfter = header ? Number(header) : 0;
+        }
+
+        if (!retryAfter) {
+          retryAfter = 3 * 60;
+        }
 
         if (retryAfter > 0) {
-          const until = Date.now() + retryAfter * 1000;
-          try {
-            localStorage.setItem('sadp_office_lockout_until', String(until));
-          } catch {}
-          setLockoutRemainingSeconds(retryAfter);
-          throw new Error(`Too many failed attempts. Try again in ${formatCountdown(retryAfter)}.`);
+          activateLockout(retryAfter);
+          return;
         }
 
         throw new Error('Too many failed attempts. Please try again later.');
@@ -158,6 +244,7 @@ export function OfficeMessages() {
 
       setInputCode('');
       setLockoutRemainingSeconds(0);
+      setFailedAttempts(0);
       try {
         localStorage.removeItem('sadp_office_lockout_until');
       } catch {}
@@ -178,10 +265,13 @@ export function OfficeMessages() {
     setIsAuthenticated(false);
     setMessages([]);
     setError('');
+    setFailedAttempts(0);
   };
 
   return (
     <div className="min-h-screen bg-[#f4ecd9] text-brown-dark">
+      {lockoutModal}
+
       <div className="mx-auto max-w-7xl px-6 md:px-10 py-6 md:py-8">
         <div className="flex items-center justify-between border-b border-brown/10 pb-4">
           <div>
@@ -223,7 +313,7 @@ export function OfficeMessages() {
                     onChange={(e) => setInputCode(e.target.value)}
                     type="password"
                     placeholder="Office access code"
-                    disabled={isAuthenticated || authenticating || lockoutRemainingSeconds > 0}
+                    disabled={isAuthenticated || authenticating || isLockoutActive}
                     className="w-full bg-parchment/70 border border-brown/20 px-10 py-3 font-body text-charcoal placeholder:text-brown/40 focus:outline-none focus:border-gold"
                   />
                 </div>
@@ -240,13 +330,13 @@ export function OfficeMessages() {
                   <button
                     type="button"
                     onClick={() => void login()}
-                    disabled={authenticating || lockoutRemainingSeconds > 0}
+                    disabled={authenticating || isLockoutActive}
                     className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brown-dark text-parchment-light font-display tracking-[0.25em] text-xs uppercase border border-gold/60 hover:bg-brown transition-colors disabled:opacity-70"
                   >
                     <ShieldAlert className="w-4 h-4 text-gold" />
                     {authenticating
                       ? 'Checking...'
-                      : lockoutRemainingSeconds > 0
+                      : isLockoutActive
                         ? `Try Again ${formatCountdown(lockoutRemainingSeconds)}`
                         : 'Open Inbox'}
                   </button>
@@ -266,12 +356,6 @@ export function OfficeMessages() {
                 Refresh
               </button>
             </div>
-
-            {lockoutRemainingSeconds > 0 ? (
-              <p className="mt-3 font-display text-[11px] tracking-[0.2em] uppercase text-red-700">
-                Login paused. Try again in {formatCountdown(lockoutRemainingSeconds)}.
-              </p>
-            ) : null}
 
             {error ? (
               <div className="mt-5 rounded border border-red-300/80 bg-red-50 px-4 py-3 text-red-900 font-body text-sm leading-relaxed">
