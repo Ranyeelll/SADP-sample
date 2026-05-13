@@ -1,8 +1,9 @@
 import crypto from 'node:crypto';
+import { safeEqualText } from './security.js';
 
 const sessionCookieName = 'sadp_office_session';
 const officeAccessToken = process.env.OFFICE_ACCESS_TOKEN;
-const sessionSecret = process.env.OFFICE_SESSION_SECRET || officeAccessToken;
+const sessionSecret = process.env.OFFICE_SESSION_SECRET;
 const sessionLifetimeHours = Number(process.env.OFFICE_SESSION_HOURS || '12');
 
 function getSecretBuffer() {
@@ -33,17 +34,6 @@ function signValue(value) {
     .digest('base64url');
 }
 
-function safeEqual(left, right) {
-  const leftBuffer = Buffer.from(left);
-  const rightBuffer = Buffer.from(right);
-
-  if (leftBuffer.length !== rightBuffer.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(leftBuffer, rightBuffer);
-}
-
 function serializeCookie(value, maxAgeSeconds) {
   const secure = process.env.NODE_ENV === 'production';
   const attributes = [
@@ -66,7 +56,7 @@ export function getOfficeAccessToken() {
 }
 
 export function canUseOfficeAuth() {
-  return Boolean(officeAccessToken && sessionSecret);
+  return Boolean(officeAccessToken && sessionSecret && sessionSecret.length >= 32);
 }
 
 export function createOfficeSessionCookie() {
@@ -103,7 +93,7 @@ export function hasValidOfficeSession(req) {
 
   const expectedSignature = signValue(rawExpiry);
 
-  if (!safeEqual(providedSignature, expectedSignature)) {
+  if (!safeEqualText(providedSignature, expectedSignature)) {
     return false;
   }
 

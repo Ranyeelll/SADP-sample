@@ -1,14 +1,17 @@
 import { ensureMessagesTable, pool } from './db.js';
 import { canUseOfficeAuth, hasValidOfficeSession } from './officeAuth.js';
+import { applyApiSecurityHeaders } from './security.js';
 
 export default async function handler(req, res) {
+  applyApiSecurityHeaders(res);
+
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
   if (!canUseOfficeAuth()) {
-    return res.status(500).json({ error: 'Office authentication is not configured.' });
+    return res.status(500).json({ error: 'Office authentication is unavailable.' });
   }
 
   if (!hasValidOfficeSession(req)) {
@@ -25,9 +28,7 @@ export default async function handler(req, res) {
     );
 
     return res.status(200).json({ messages: result.rows });
-  } catch (error) {
-    return res.status(500).json({
-      error: error instanceof Error ? error.message : 'Unable to load messages.',
-    });
+  } catch {
+    return res.status(500).json({ error: 'Unable to load messages.' });
   }
 }

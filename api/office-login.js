@@ -3,9 +3,10 @@ import {
   createOfficeSessionCookie,
   getOfficeAccessToken,
 } from './officeAuth.js';
+import { applyApiSecurityHeaders, isAllowedOrigin, safeEqualText } from './security.js';
 
-const maxFailedAttempts = 5;
-const lockoutWindowMs = 15 * 60 * 1000;
+const maxFailedAttempts = 3;
+const lockoutWindowMs = 10 * 60 * 1000;
 
 const globalLimiter = globalThis;
 globalLimiter.__sadpOfficeLimiter = globalLimiter.__sadpOfficeLimiter || new Map();
@@ -32,13 +33,19 @@ function readLimiterEntry(ip) {
 }
 
 export default async function handler(req, res) {
+  applyApiSecurityHeaders(res);
+
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
+  if (!isAllowedOrigin(req)) {
+    return res.status(403).json({ error: 'Forbidden.' });
+  }
+
   if (!canUseOfficeAuth()) {
-    return res.status(500).json({ error: 'Office authentication is not configured.' });
+    return res.status(500).json({ error: 'Office authentication is unavailable.' });
   }
 
   const ip = getClientIp(req);
@@ -52,7 +59,7 @@ export default async function handler(req, res) {
   const code = typeof req.body?.code === 'string' ? req.body.code.trim() : '';
   const officeCode = getOfficeAccessToken();
 
-  if (!code || code !== officeCode) {
+  if (!code || !safeEqualText(code, officeCode)) {
     entry.attempts += 1;
 
     if (entry.attempts >= maxFailedAttempts) {
@@ -60,7 +67,7 @@ export default async function handler(req, res) {
     }
 
     globalLimiter.__sadpOfficeLimiter.set(ip, entry);
-    return res.status(401).json({ error: 'Invalid office access code.' });
+    return res.status(401).json({ error: 'Invalid credentials.' });
   }
 
   globalLimiter.__sadpOfficeLimiter.delete(ip);

@@ -6,7 +6,8 @@ if (!connectionString) {
   throw new Error('POSTGRES_URL is not configured.');
 }
 
-const useSsl = process.env.POSTGRES_SSL !== 'false';
+const isProduction = process.env.NODE_ENV === 'production';
+const allowInsecureLocalSsl = process.env.POSTGRES_SSL === 'false' && !isProduction;
 
 const globalForPg = globalThis;
 
@@ -14,7 +15,7 @@ export const pool =
   globalForPg.__sadpPool ??
   new Pool({
     connectionString,
-    ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
+    ...(allowInsecureLocalSsl ? {} : { ssl: { rejectUnauthorized: true } }),
   });
 
 if (!globalForPg.__sadpPool) {
