@@ -13,6 +13,11 @@ type DevMessage = {
 
 const devMessages: DevMessage[] = []
 const officeAccessToken = process.env.OFFICE_ACCESS_TOKEN ?? 'SADP-OFFICE'
+const devSessionCookie = 'sadp_office_session=dev-session; Path=/; HttpOnly; SameSite=Strict; Max-Age=43200'
+const clearDevSessionCookie = 'sadp_office_session=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0'
+const maxFailedAttempts = 5
+const lockoutWindowMs = 15 * 60 * 1000
+const loginAttempts = new Map<string, { attempts: number; lockedUntil: number }>()
 
 function collectBody(req: IncomingMessage) {
   return new Promise<string>((resolve, reject) => {
@@ -28,6 +33,17 @@ function json(res: ServerResponse, statusCode: number, payload: unknown) {
   res.statusCode = statusCode
   res.setHeader('Content-Type', 'application/json')
   res.end(JSON.stringify(payload))
+}
+
+function getClientIp(req: IncomingMessage) {
+  const forwarded = req.headers['x-forwarded-for']
+  const value = Array.isArray(forwarded) ? forwarded[0] : forwarded
+  return value?.split(',')[0]?.trim() || req.socket?.remoteAddress || 'unknown'
+}
+
+function hasDevSession(req: IncomingMessage) {
+  const cookieHeader = typeof req.headers.cookie === 'string' ? req.headers.cookie : ''
+  return cookieHeader.includes('sadp_office_session=dev-session')
 }
 
 function sadpDevApiPlugin(): Plugin {
@@ -74,15 +90,55 @@ function sadpDevApiPlugin(): Plugin {
         }
 
         if (req.method === 'GET' && url === '/api/messages') {
-          const providedToken = req.headers['x-office-token']
-          const tokenValue = Array.isArray(providedToken) ? providedToken[0] : providedToken
-
-          if (tokenValue !== officeAccessToken) {
+          if (!hasDevSession(req)) {
             json(res, 401, { error: 'Unauthorized.' })
             return
           }
 
           json(res, 200, { messages: devMessages })
+          return
+        }
+
+        if (req.method === 'POST' && url === '/api/office-login') {
+          const ip = getClientIp(req)
+          const now = Date.now()
+          const entry = loginAttempts.get(ip) || { attempts: 0, lockedUntil: 0 }
+
+          if (entry.lockedUntil && now < entry.lockedUntil) {
+            json(res, 429, { error: 'Too many failed attempts. Please try again later.' })
+            return
+          }
+
+          try {
+            const bodyText = await collectBody(req)
+            const body = bodyText ? JSON.parse(bodyText) as { code?: string } : {}
+            const code = typeof body.code === 'string' ? body.code.trim() : ''
+
+            if (!code || code !== officeAccessToken) {
+              entry.attempts += 1
+
+              if (entry.attempts >= maxFailedAttempts) {
+                entry.lockedUntil = now + lockoutWindowMs
+              }
+
+              loginAttempts.set(ip, entry)
+              json(res, 401, { error: 'Invalid office access code.' })
+              return
+            }
+
+            loginAttempts.delete(ip)
+            res.setHeader('Set-Cookie', devSessionCookie)
+            json(res, 200, { ok: true, mode: 'dev-cookie-session' })
+          } catch {
+            json(res, 400, { error: 'Invalid request body.' })
+          }
+
+          return
+        }
+
+        if (req.method === 'POST' && url === '/api/office-logout') {
+          res.setHeader('Set-Cookie', clearDevSessionCookie)
+          json(res, 200, { ok: true })
           return
         }
 

@@ -14,17 +14,12 @@ type MessageRecord = {
 };
 
 export function OfficeMessages() {
-  const [token, setToken] = useState('');
-  const [inputToken, setInputToken] = useState('');
+  const [inputCode, setInputCode] = useState('');
   const [messages, setMessages] = useState<MessageRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    const savedToken = sessionStorage.getItem('sadp-office-token') ?? '';
-    setToken(savedToken);
-    setInputToken(savedToken);
-  }, []);
+  const [authenticating, setAuthenticating] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const formattedMessages = useMemo(
     () =>
@@ -35,24 +30,17 @@ export function OfficeMessages() {
     [messages],
   );
 
-  const loadMessages = async (accessToken: string) => {
-    if (!accessToken) {
-      setError('Enter the office access code to view messages.');
-      return;
-    }
-
+  const loadMessages = async () => {
     setLoading(true);
     setError('');
 
     try {
-      const response = await fetch('/api/messages', {
-        headers: {
-          'x-office-token': accessToken,
-        },
-      });
+      const response = await fetch('/api/messages', { credentials: 'include' });
 
       if (response.status === 401) {
-        throw new Error('Invalid office access code.');
+        setIsAuthenticated(false);
+        setMessages([]);
+        return;
       }
 
       if (!response.ok) {
@@ -60,6 +48,7 @@ export function OfficeMessages() {
       }
 
       const data = (await response.json()) as { messages: MessageRecord[] };
+      setIsAuthenticated(true);
       setMessages(data.messages ?? []);
     } catch (loadError) {
       setMessages([]);
@@ -70,10 +59,61 @@ export function OfficeMessages() {
   };
 
   useEffect(() => {
-    if (token) {
-      void loadMessages(token);
+    void loadMessages();
+  }, []);
+
+  const login = async () => {
+    const code = inputCode.trim();
+
+    if (!code) {
+      setError('Enter the office access code to continue.');
+      return;
     }
-  }, [token]);
+
+    setAuthenticating(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/office-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ code }),
+      });
+
+      if (response.status === 401) {
+        throw new Error('Invalid office access code.');
+      }
+
+      if (response.status === 429) {
+        throw new Error('Too many failed attempts. Please try again later.');
+      }
+
+      if (!response.ok) {
+        throw new Error('Unable to verify access right now.');
+      }
+
+      setInputCode('');
+      await loadMessages();
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : 'Unable to verify access right now.');
+    } finally {
+      setAuthenticating(false);
+    }
+  };
+
+  const logout = async () => {
+    await fetch('/api/office-logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    setIsAuthenticated(false);
+    setMessages([]);
+    setError('');
+  };
 
   return (
     <PageLayout>
@@ -105,32 +145,43 @@ export function OfficeMessages() {
               <div className="relative flex-1 sm:min-w-[280px]">
                 <Lock className="w-4 h-4 text-brown/55 absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
-                  value={inputToken}
-                  onChange={(e) => setInputToken(e.target.value)}
+                  value={inputCode}
+                  onChange={(e) => setInputCode(e.target.value)}
                   type="password"
                   placeholder="Office access code"
+                  disabled={isAuthenticated || authenticating}
                   className="w-full bg-parchment/70 border border-brown/20 px-10 py-3 font-body text-charcoal placeholder:text-brown/40 focus:outline-none focus:border-gold"
                 />
               </div>
-              <button
-                type="button"
-                onClick={() => {
-                  sessionStorage.setItem('sadp-office-token', inputToken.trim());
-                  setToken(inputToken.trim());
-                }}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brown-dark text-parchment-light font-display tracking-[0.25em] text-xs uppercase border border-gold/60 hover:bg-brown transition-colors"
-              >
-                <ShieldAlert className="w-4 h-4 text-gold" />
-                Open Inbox
-              </button>
+              {isAuthenticated ? (
+                <button
+                  type="button"
+                  onClick={() => void logout()}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brown-dark text-parchment-light font-display tracking-[0.25em] text-xs uppercase border border-gold/60 hover:bg-brown transition-colors"
+                >
+                  <ShieldAlert className="w-4 h-4 text-gold" />
+                  Sign Out
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => void login()}
+                  disabled={authenticating}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brown-dark text-parchment-light font-display tracking-[0.25em] text-xs uppercase border border-gold/60 hover:bg-brown transition-colors disabled:opacity-70"
+                >
+                  <ShieldAlert className="w-4 h-4 text-gold" />
+                  {authenticating ? 'Checking...' : 'Open Inbox'}
+                </button>
+              )}
             </div>
           </div>
 
           <div className="mt-4 flex items-center justify-between gap-4 text-sm text-brown/80">
-            <p className="font-body">Keep the access code private. The API rejects requests without it.</p>
+            <p className="font-body">Access is now protected by a secure server session and expires automatically.</p>
             <button
               type="button"
-              onClick={() => void loadMessages(token)}
+              onClick={() => void loadMessages()}
+              disabled={!isAuthenticated}
               className="inline-flex items-center gap-2 font-display tracking-[0.2em] uppercase text-[11px] text-brown-dark hover:text-gold-dark transition-colors"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -155,6 +206,16 @@ export function OfficeMessages() {
           {loading ? (
             <div className="page-bg border border-brown/15 p-8 text-center font-cormorant italic text-charcoal">
               Loading messages...
+            </div>
+          ) : !isAuthenticated ? (
+            <div className="page-bg border border-brown/15 p-10 text-center">
+              <Lock className="w-8 h-8 text-gold-dark mx-auto mb-3" />
+              <h3 className="font-display text-2xl text-brown-dark mb-2" style={{ fontWeight: 600 }}>
+                Office sign-in required
+              </h3>
+              <p className="font-cormorant italic text-charcoal">
+                Enter the office access code to view submitted messages.
+              </p>
             </div>
           ) : formattedMessages.length ? (
             formattedMessages.map((message) => (

@@ -1,6 +1,5 @@
 import { ensureMessagesTable, pool } from './db.js';
-
-const officeToken = process.env.OFFICE_ACCESS_TOKEN;
+import { canUseOfficeAuth, hasValidOfficeSession } from './officeAuth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,14 +7,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  if (!officeToken) {
-    return res.status(500).json({ error: 'OFFICE_ACCESS_TOKEN is not configured.' });
+  if (!canUseOfficeAuth()) {
+    return res.status(500).json({ error: 'Office authentication is not configured.' });
   }
 
-  const providedToken = req.headers['x-office-token'];
-  const tokenValue = Array.isArray(providedToken) ? providedToken[0] : providedToken;
-
-  if (tokenValue !== officeToken) {
+  if (!hasValidOfficeSession(req)) {
     return res.status(401).json({ error: 'Unauthorized.' });
   }
 

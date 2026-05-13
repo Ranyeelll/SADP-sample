@@ -8,6 +8,9 @@ import { FlipbookArchive } from './pages/FlipbookArchive';
 import { Contact } from './pages/Contact';
 import { OfficeMessages } from './pages/OfficeMessages';
 import { Reader } from './pages/Reader';
+
+const officeInboxPath = '/parish-office/messages'
+
 export function App() {
   return (
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -21,7 +24,7 @@ export function App() {
         <Route path="/flipbook/read" element={<Reader />} />
         <Route path="/flipbook/read/:section" element={<Reader />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/office/messages" element={<OfficeMessages />} />
+        <Route path={officeInboxPath} element={<OfficeMessages />} />
       </Routes>
     </BrowserRouter>);
 
