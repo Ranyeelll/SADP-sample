@@ -11,6 +11,10 @@ const lockoutWindowMs = 10 * 60 * 1000;
 const globalLimiter = globalThis;
 globalLimiter.__sadpOfficeLimiter = globalLimiter.__sadpOfficeLimiter || new Map();
 
+function getRetryAfterSeconds(lockedUntil, now) {
+  return Math.max(1, Math.ceil((lockedUntil - now) / 1000));
+}
+
 function getClientIp(req) {
   const forwarded = req.headers['x-forwarded-for'];
   const value = Array.isArray(forwarded) ? forwarded[0] : forwarded;
@@ -53,7 +57,12 @@ export default async function handler(req, res) {
   const now = Date.now();
 
   if (entry.lockedUntil && now < entry.lockedUntil) {
-    return res.status(429).json({ error: 'Too many failed attempts. Please try again later.' });
+    const retryAfterSeconds = getRetryAfterSeconds(entry.lockedUntil, now);
+    res.setHeader('Retry-After', String(retryAfterSeconds));
+    return res.status(429).json({
+      error: 'Too many failed attempts. Please try again later.',
+      retryAfterSeconds,
+    });
   }
 
   const code = typeof req.body?.code === 'string' ? req.body.code.trim() : '';
@@ -64,6 +73,13 @@ export default async function handler(req, res) {
 
     if (entry.attempts >= maxFailedAttempts) {
       entry.lockedUntil = now + lockoutWindowMs;
+      const retryAfterSeconds = getRetryAfterSeconds(entry.lockedUntil, now);
+      globalLimiter.__sadpOfficeLimiter.set(ip, entry);
+      res.setHeader('Retry-After', String(retryAfterSeconds));
+      return res.status(429).json({
+        error: 'Too many failed attempts. Please try again later.',
+        retryAfterSeconds,
+      });
     }
 
     globalLimiter.__sadpOfficeLimiter.set(ip, entry);

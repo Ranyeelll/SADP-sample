@@ -11,6 +11,18 @@ type MessageRecord = {
   created_at: string;
 };
 
+type OfficeLoginErrorResponse = {
+  error?: string;
+  retryAfterSeconds?: number;
+};
+
+function formatCountdown(totalSeconds: number) {
+  const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+  const minutes = String(Math.floor(safeSeconds / 60)).padStart(2, '0');
+  const seconds = String(safeSeconds % 60).padStart(2, '0');
+  return `${minutes}:${seconds}`;
+}
+
 export function OfficeMessages() {
   const [inputCode, setInputCode] = useState('');
   const [messages, setMessages] = useState<MessageRecord[]>([]);
@@ -18,6 +30,21 @@ export function OfficeMessages() {
   const [error, setError] = useState('');
   const [authenticating, setAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [lockoutRemainingSeconds, setLockoutRemainingSeconds] = useState(0);
+
+  useEffect(() => {
+    if (!lockoutRemainingSeconds) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setLockoutRemainingSeconds((value) => Math.max(0, value - 1));
+    }, 1000);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [lockoutRemainingSeconds]);
 
   const formattedMessages = useMemo(
     () =>
@@ -61,6 +88,11 @@ export function OfficeMessages() {
   }, []);
 
   const login = async () => {
+    if (lockoutRemainingSeconds > 0) {
+      setError(`Too many failed attempts. Try again in ${formatCountdown(lockoutRemainingSeconds)}.`);
+      return;
+    }
+
     const code = inputCode.trim();
 
     if (!code) {
@@ -86,6 +118,14 @@ export function OfficeMessages() {
       }
 
       if (response.status === 429) {
+        const data = (await response.json().catch(() => ({}))) as OfficeLoginErrorResponse;
+        const retryAfter = Number(data.retryAfterSeconds || 0);
+
+        if (retryAfter > 0) {
+          setLockoutRemainingSeconds(retryAfter);
+          throw new Error(`Too many failed attempts. Try again in ${formatCountdown(retryAfter)}.`);
+        }
+
         throw new Error('Too many failed attempts. Please try again later.');
       }
 
@@ -94,6 +134,7 @@ export function OfficeMessages() {
       }
 
       setInputCode('');
+      setLockoutRemainingSeconds(0);
       await loadMessages();
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Unable to verify access right now.');
@@ -156,7 +197,7 @@ export function OfficeMessages() {
                     onChange={(e) => setInputCode(e.target.value)}
                     type="password"
                     placeholder="Office access code"
-                    disabled={isAuthenticated || authenticating}
+                    disabled={isAuthenticated || authenticating || lockoutRemainingSeconds > 0}
                     className="w-full bg-parchment/70 border border-brown/20 px-10 py-3 font-body text-charcoal placeholder:text-brown/40 focus:outline-none focus:border-gold"
                   />
                 </div>
@@ -173,11 +214,15 @@ export function OfficeMessages() {
                   <button
                     type="button"
                     onClick={() => void login()}
-                    disabled={authenticating}
+                    disabled={authenticating || lockoutRemainingSeconds > 0}
                     className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brown-dark text-parchment-light font-display tracking-[0.25em] text-xs uppercase border border-gold/60 hover:bg-brown transition-colors disabled:opacity-70"
                   >
                     <ShieldAlert className="w-4 h-4 text-gold" />
-                    {authenticating ? 'Checking...' : 'Open Inbox'}
+                    {authenticating
+                      ? 'Checking...'
+                      : lockoutRemainingSeconds > 0
+                        ? `Try Again ${formatCountdown(lockoutRemainingSeconds)}`
+                        : 'Open Inbox'}
                   </button>
                 )}
               </div>
@@ -195,6 +240,12 @@ export function OfficeMessages() {
                 Refresh
               </button>
             </div>
+
+            {lockoutRemainingSeconds > 0 ? (
+              <p className="mt-3 font-display text-[11px] tracking-[0.2em] uppercase text-red-700">
+                Login paused. Try again in {formatCountdown(lockoutRemainingSeconds)}.
+              </p>
+            ) : null}
 
             {error ? (
               <div className="mt-5 rounded border border-red-300/80 bg-red-50 px-4 py-3 text-red-900 font-body text-sm leading-relaxed">
