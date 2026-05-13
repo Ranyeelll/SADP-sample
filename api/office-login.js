@@ -6,7 +6,7 @@ import {
 import { applyApiSecurityHeaders, isAllowedOrigin, safeEqualText } from './security.js';
 
 const maxFailedAttempts = 3;
-const lockoutWindowMs = 10 * 60 * 1000;
+const lockoutWindowMs = 3 * 60 * 1000;
 
 const globalLimiter = globalThis;
 globalLimiter.__sadpOfficeLimiter = globalLimiter.__sadpOfficeLimiter || new Map();

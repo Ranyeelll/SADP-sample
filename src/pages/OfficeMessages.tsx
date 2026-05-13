@@ -31,9 +31,28 @@ export function OfficeMessages() {
   const [authenticating, setAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [lockoutRemainingSeconds, setLockoutRemainingSeconds] = useState(0);
+  const LOCKOUT_STORAGE_KEY = 'sadp_office_lockout_until';
+
+  // Load persisted lockout expiry on mount so countdown survives reloads
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(LOCKOUT_STORAGE_KEY);
+      if (!raw) return;
+      const until = Number(raw);
+      if (!Number.isFinite(until)) return;
+      const secs = Math.max(0, Math.ceil((until - Date.now()) / 1000));
+      if (secs > 0) setLockoutRemainingSeconds(secs);
+      else localStorage.removeItem(LOCKOUT_STORAGE_KEY);
+    } catch {
+      // ignore storage errors
+    }
+  }, []);
 
   useEffect(() => {
     if (!lockoutRemainingSeconds) {
+      try {
+        localStorage.removeItem(LOCKOUT_STORAGE_KEY);
+      } catch {}
       return;
     }
 
@@ -122,6 +141,10 @@ export function OfficeMessages() {
         const retryAfter = Number(data.retryAfterSeconds || 0);
 
         if (retryAfter > 0) {
+          const until = Date.now() + retryAfter * 1000;
+          try {
+            localStorage.setItem('sadp_office_lockout_until', String(until));
+          } catch {}
           setLockoutRemainingSeconds(retryAfter);
           throw new Error(`Too many failed attempts. Try again in ${formatCountdown(retryAfter)}.`);
         }
@@ -135,6 +158,9 @@ export function OfficeMessages() {
 
       setInputCode('');
       setLockoutRemainingSeconds(0);
+      try {
+        localStorage.removeItem('sadp_office_lockout_until');
+      } catch {}
       await loadMessages();
     } catch (loginError) {
       setError(loginError instanceof Error ? loginError.message : 'Unable to verify access right now.');
