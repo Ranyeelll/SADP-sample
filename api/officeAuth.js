@@ -6,6 +6,10 @@ const officeAccessToken = process.env.OFFICE_ACCESS_TOKEN;
 const sessionSecret = process.env.OFFICE_SESSION_SECRET;
 const sessionLifetimeHours = Number(process.env.OFFICE_SESSION_HOURS || '12');
 
+function isValidSessionLifetimeHours(value) {
+  return Number.isFinite(value) && value > 0 && value <= 168;
+}
+
 function getSecretBuffer() {
   return Buffer.from(sessionSecret || '', 'utf8');
 }
@@ -56,10 +60,20 @@ export function getOfficeAccessToken() {
 }
 
 export function canUseOfficeAuth() {
-  return Boolean(officeAccessToken && sessionSecret && sessionSecret.length >= 32);
+  return Boolean(
+    officeAccessToken &&
+      sessionSecret &&
+      sessionSecret.length >= 32 &&
+      sessionSecret !== officeAccessToken &&
+      isValidSessionLifetimeHours(sessionLifetimeHours),
+  );
 }
 
 export function createOfficeSessionCookie() {
+  if (!canUseOfficeAuth()) {
+    throw new Error('Office authentication is not configured.');
+  }
+
   const maxAgeSeconds = Math.max(1, Math.floor(sessionLifetimeHours * 60 * 60));
   const expiresAt = Date.now() + maxAgeSeconds * 1000;
   const payload = String(expiresAt);

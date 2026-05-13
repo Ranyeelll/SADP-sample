@@ -52,6 +52,20 @@ function hasLengthInRange(value, minimum, maximum) {
   return value.length >= minimum && value.length <= maximum;
 }
 
+export function validateOfficeAccessCode(value) {
+  const code = cleanText(value);
+
+  if (!code) {
+    return { valid: false, error: 'Please enter your access code.' };
+  }
+
+  if (!hasLengthInRange(code, 1, 128)) {
+    return { valid: false, error: 'Access code is invalid.' };
+  }
+
+  return { valid: true, value: code };
+}
+
 export function validateContactPayload(body) {
   const name = cleanText(body?.name);
   const email = cleanText(body?.email).toLowerCase();

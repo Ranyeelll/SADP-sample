@@ -274,14 +274,18 @@ export function Contact() {
                 });
 
                 if (!response.ok) {
-                  const data = await response.json().catch(() => null);
-                  throw new Error(data?.error ?? 'Failed to send your message.');
+                  if (response.status === 400) {
+                    const data = await response.json().catch(() => null);
+                    throw new Error(data?.error ?? 'Please check the form and try again.');
+                  }
+
+                  throw new Error('We could not send your message right now. Please try again later.');
                 }
 
                 setSubmitted(true);
                 form.reset();
-              } catch (submitError) {
-                setError(submitError instanceof Error ? submitError.message : 'Failed to send your message.');
+              } catch {
+                setError('We could not send your message right now. Please try again later.');
               } finally {
                 setSubmitting(false);
               }

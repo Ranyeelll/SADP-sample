@@ -3,7 +3,7 @@ import {
   createOfficeSessionCookie,
   getOfficeAccessToken,
 } from './officeAuth.js';
-import { applyApiSecurityHeaders, isAllowedOrigin, safeEqualText } from './security.js';
+import { applyApiSecurityHeaders, isAllowedOrigin, safeEqualText, validateOfficeAccessCode } from './security.js';
 
 const maxFailedAttempts = 3;
 const lockoutWindowMs = 3 * 60 * 1000;
@@ -65,7 +65,13 @@ export default async function handler(req, res) {
     });
   }
 
-  const code = typeof req.body?.code === 'string' ? req.body.code.trim() : '';
+  const parsedCode = validateOfficeAccessCode(req.body?.code);
+
+  if (!parsedCode.valid) {
+    return res.status(400).json({ error: parsedCode.error });
+  }
+
+  const code = parsedCode.value;
   const officeCode = getOfficeAccessToken();
 
   if (!code || !safeEqualText(code, officeCode)) {

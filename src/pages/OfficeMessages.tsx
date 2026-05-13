@@ -31,7 +31,6 @@ export function OfficeMessages() {
   const [error, setError] = useState('');
   const [authenticating, setAuthenticating] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [failedAttempts, setFailedAttempts] = useState(0);
   const [lockoutRemainingSeconds, setLockoutRemainingSeconds] = useState(0);
   const isLockoutActive = lockoutRemainingSeconds > 0;
   const LOCKOUT_STORAGE_KEY = 'sadp_office_lockout_until';
@@ -47,7 +46,6 @@ export function OfficeMessages() {
     }
 
     setLockoutRemainingSeconds(retryAfter);
-    setFailedAttempts(3);
     setError(`Too many failed attempts. Try again in ${formatCountdown(retryAfter)}.`);
   };
   const lockoutModal =
@@ -162,9 +160,9 @@ export function OfficeMessages() {
       const data = (await response.json()) as { messages: MessageRecord[] };
       setIsAuthenticated(true);
       setMessages(data.messages ?? []);
-    } catch (loadError) {
+    } catch {
       setMessages([]);
-      setError(loadError instanceof Error ? loadError.message : 'Unable to load messages.');
+      setError('We could not load messages right now. Please refresh and try again.');
     } finally {
       setLoading(false);
     }
@@ -201,17 +199,16 @@ export function OfficeMessages() {
       });
 
       if (response.status === 401) {
-        setFailedAttempts((currentAttempts) => {
-          const nextAttempts = currentAttempts + 1;
+        const stored = localStorage.getItem('sadp_office_failed_count') || '0';
+        const failedCount = Math.min(3, Number(stored) + 1);
+        localStorage.setItem('sadp_office_failed_count', String(failedCount));
 
-          if (nextAttempts >= 3) {
-            activateLockout(3 * 60);
-          } else {
-            setError('Invalid office access code.');
-          }
-
-          return nextAttempts;
-        });
+        if (failedCount >= 3) {
+          localStorage.removeItem('sadp_office_failed_count');
+          activateLockout(3 * 60);
+        } else {
+          setError('Invalid office access code.');
+        }
         return;
       }
 
@@ -244,13 +241,13 @@ export function OfficeMessages() {
 
       setInputCode('');
       setLockoutRemainingSeconds(0);
-      setFailedAttempts(0);
       try {
         localStorage.removeItem('sadp_office_lockout_until');
+        localStorage.removeItem('sadp_office_failed_count');
       } catch {}
       await loadMessages();
-    } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : 'Unable to verify access right now.');
+    } catch {
+      setError('We could not verify access right now. Please try again.');
     } finally {
       setAuthenticating(false);
     }
@@ -265,7 +262,9 @@ export function OfficeMessages() {
     setIsAuthenticated(false);
     setMessages([]);
     setError('');
-    setFailedAttempts(0);
+    try {
+      localStorage.removeItem('sadp_office_failed_count');
+    } catch {}
   };
 
   return (

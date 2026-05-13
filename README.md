@@ -17,6 +17,12 @@ Required environment variables:
 2. `OFFICE_ACCESS_TOKEN` - a private code used by the parish office inbox page
 3. `OFFICE_SESSION_SECRET` - a long random secret used to sign secure office sessions
 
+Secret hygiene:
+
+1. Use a different value for `OFFICE_SESSION_SECRET` than `OFFICE_ACCESS_TOKEN`.
+2. Keep `.env.local` out of version control.
+3. Rotate any secret that was shared outside your private environment.
+
 Create the table once in your database:
 
 ```sql
