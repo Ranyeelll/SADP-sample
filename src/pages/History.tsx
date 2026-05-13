@@ -9,8 +9,8 @@ const sections = [
   title: 'Founding of the Parish',
   year: '2011',
   image:
-  '/founding-of-parish.jpg',
-  caption: 'The original chapel, established by Decree 2011-276 on 13 June 2011.',
+  '/sadp-chapel-original.jpg',
+  caption: 'San Antonio de Padua Chapel — then a sub-parish of Christ the King — the original chapel where the parish began, established by Decree 2011-276 on 13 June 2011.',
   body: [
   'The story of San Antonio de Padua Parish begins in Batasan, Quezon City — a growing community seeking a spiritual home. Families across the northern neighborhoods found themselves traveling long distances to attend Mass in distant parishes, and their faithful petitions reached the Diocese of Novaliches.',
   'Responding to this call, the Diocese of Novaliches erected San Antonio de Padua Parish by Decree 2011-276, signed by Most Rev. Antonio R. Tobias, DD, and given in Fairview, Quezon City on 13 June 2011. The parish was established under the patronage of Saint Anthony of Padua, the gentle Franciscan friar known to generations of Filipinos as the patron of the lost and the poor. Mass was first celebrated in a modest chapel, marking the beginning of a new chapter in the spiritual life of the community.',
@@ -24,13 +24,62 @@ const sections = [
   title: 'Years of Growth & Building',
   year: '2012 — 2018',
   image:
-  '/growth-of-community.jpg',
-  caption: 'The expanding parish community.',
+  '/founding-of-parish.jpg',
+  caption: 'The parish church under renovation and construction during its years of growth.',
   body: [
   'In the years following the parish\'s establishment in 2011, the small chapel could no longer accommodate the growing congregation of faithful. Recognizing this growth, the parish began planning for a permanent, more spacious church building to serve the community\'s sacramental and pastoral needs.',
   'During these formative years, the parish deepened its pastoral presence through the launch of lay ministries, Bible study circles, and prayer groups that took root in countless homes across Batasan. Catechetical programs expanded, the choir began to flourish, and community organizations such as the Knights of Columbus and Catholic Women\'s League found their home within the parish.',
   'The spirit of Vatican II animated our liturgy and pastoral approach, as the faithful grew in their understanding of the Church\'s mission and their role in building the Kingdom of God in their neighborhoods.']
 
+},
+{
+  id: 'bayanihan',
+  title: 'Bayanihan: Building the Church Together',
+  year: '2014 — 2017',
+  image: '/bayanihan-3.jpg',
+  caption:
+    'Parishioners and youth working side by side during the construction of the parish church — the spirit of Bayanihan in action.',
+  body: [
+    'As the parish outgrew its original chapel, the work of building a permanent church began — not by contract alone, but in the great Filipino spirit of Bayanihan. Fathers, mothers, youth, and children gave their Saturdays, their Sundays, and their evenings to dig, to haul, to mix, and to lift.',
+    'The construction site became a second sanctuary. Volunteers carried sand and gravel by the bucketful, tied rebar in the heat of the sun, and poured concrete late into the night. Meals were shared on wooden planks, and prayers were lifted from scaffolding as the walls of the new church slowly rose.',
+    'It is a story written not only in stone and steel, but in calloused hands, sun-burnt shoulders, and the joyful faces of young people who chose to build the house of God with their own strength. Every column, every beam, every tile of the parish church carries this offering — the Bayanihan of the people of San Antonio de Padua.'
+  ],
+  gallery: [
+    {
+      src: '/bayanihan-1.jpg',
+      alt: 'Volunteers in "One Big Faith" shirts framing the new structure'
+    },
+    {
+      src: '/bayanihan-2.jpg',
+      alt: 'Youth volunteers carrying soil and preparing the foundation under the columns'
+    },
+    {
+      src: '/bayanihan-3.jpg',
+      alt: 'The parish church rising — cement bags stacked, scaffolding, and parishioners at work'
+    },
+    {
+      src: '/bayanihan-4.jpg',
+      alt: 'Interior renovation work below the altar, with the sanctuary already in use above'
+    },
+    {
+      src: '/bayanihan-5.jpg',
+      alt: 'Foundation pit with steel rebar prepared by volunteer crews'
+    },
+    {
+      src: '/bayanihan-6.jpg',
+      alt: 'A parishioner breaking ground with a pickaxe along the roadside'
+    },
+    {
+      src: '/bayanihan-7.jpg',
+      alt: 'Youth volunteers smiling together and clearing rubble inside the church'
+    },
+    {
+      src: '/bayanihan-8.jpg',
+      alt: 'Volunteers mixing and pouring concrete during construction'
+    }
+  ],
+  pullQuote:
+    '"They came with shovels and rosaries, with sweat and song — and together, brick by brick, they built a house for the Lord."'
 },
 {
   id: 'milestones',
@@ -89,7 +138,7 @@ export function History() {
       <PageHero
         eyebrow="Chapter One"
         title="Parish History"
-        subtitle="The story of San Antonio de Padua, told in four movements."
+        subtitle="The story of San Antonio de Padua, told in five movements."
       />
       
 
@@ -170,6 +219,31 @@ export function History() {
                   {section.caption}
                 </figcaption>
               </figure>
+
+              {section.gallery && section.gallery.length > 0 &&
+              <div className="mb-10">
+                  <p className="font-display text-[10px] tracking-[0.4em] uppercase text-gold-dark text-center mb-4">
+                    Bayanihan Gallery
+                  </p>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+                    {section.gallery.map((g, gi) =>
+                  <motion.div
+                    key={gi}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.5, delay: gi * 0.05 }}
+                    className="aspect-[4/5] overflow-hidden border border-brown/15 bg-parchment-light shadow-[0_10px_22px_-12px_rgba(62,42,28,0.4)]">
+                          <img
+                            src={g.src}
+                            alt={g.alt}
+                            loading="lazy"
+                            className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-700" />
+                        </motion.div>
+                  )}
+                  </div>
+                </div>
+              }
 
               <div className="font-body text-[1.15rem] md:text-[1.2rem] text-charcoal leading-[1.85] space-y-5">
                 {section.body.map((p, i) =>

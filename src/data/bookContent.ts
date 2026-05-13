@@ -22,12 +22,12 @@ export const sections: Section[] = [
       {
         chapter: 'Chapter I — The Parish is Erected',
         pageNumber: 1,
-        image: '/founding-of-parish.jpg',
-        imageAlt: 'The original chapel of San Antonio de Padua Parish',
+        image: '/sadp-chapel-original.jpg',
+        imageAlt: 'San Antonio de Padua Chapel — the original sub-parish chapel of Christ the King in Batasan Hills, where San Antonio de Padua Parish began',
         paragraphs: [
-          'The story of San Antonio de Padua Parish begins in Batasan Hills, where families longed for a spiritual home that would be near enough for prayer, the sacraments, and the formation of their children in the faith.',
-          'By Decree 2011-276, the Diocese of Novaliches formally erected San Antonio de Padua Parish on 13 June 2011 under the guidance of Most Rev. Antonio R. Tobias, DD. The beginning was simple, but it was also clear and hopeful.',
-          'From the first Mass in a modest chapel, the parish became a place where neighbors gathered to hear the Word of God, receive the sacraments, and begin a shared life as one community.'
+          'The story of San Antonio de Padua Parish begins here — in this modest chapel pictured above, then known as San Antonio de Padua Chapel, a sub-parish of Christ the King in Batasan Hills, Quezon City.',
+          'Within these humble walls, families had long gathered for Sunday Mass, the novena to San Antonio, and the quiet sacraments of daily Christian life, even before the community bore the name of a parish.',
+          'By Decree 2011-276, the Diocese of Novaliches formally erected San Antonio de Padua Parish on 13 June 2011 under the guidance of Most Rev. Antonio R. Tobias, DD — recognizing what the people of God had already begun to build in this little chapel, and entrusting it now with the full mission of a parish.'
         ]
       },
       {
@@ -60,10 +60,93 @@ export const sections: Section[] = [
       {
         chapter: 'Chapter II — Building the Community',
         pageNumber: 4,
+        image: '/founding-of-parish.jpg',
+        imageAlt: 'The parish church of San Antonio de Padua during its renovation and construction',
         paragraphs: [
           'The parish also began to discover its wider mission. Formation sessions, devotional groups, and regular parish gatherings helped the faithful grow in knowledge of the Church and in love for one another.',
-          'The parish priest encouraged a spirit of service that reached beyond Sunday worship. Parishioners learned to see ministry as a shared responsibility, whether in the choir loft, the catechism room, the altar, or the community outreach desk.',
-          'These years gave the parish a strong center: prayer at the heart, service at the edges, and a community formed by the grace of God.'
+          'During these years the parish church itself was being renewed — pictured here in the midst of renovation and construction, its walls rising even as the community within continued to gather, pray, and serve.',
+          'The parish priest encouraged a spirit of service that reached beyond Sunday worship. Parishioners learned to see ministry as a shared responsibility, whether in the choir loft, the catechism room, the altar, or the community outreach desk — and these years gave the parish a strong center: prayer at the heart, service at the edges, and a community formed by the grace of God.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'bayanihan',
+    title: 'Bayanihan',
+    dates: '2014 — 2017',
+    pages: [
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 5,
+        image: '/bayanihan-3.jpg',
+        imageAlt: 'Parishioners and youth working together to build the parish church',
+        paragraphs: [
+          'As the parish outgrew its first chapel, the work of raising a permanent church began — not by contract alone, but in the great Filipino spirit of Bayanihan. Fathers, mothers, youth, and children gave their Saturdays, their Sundays, and their evenings to dig, to haul, to mix, and to lift.',
+          'The construction site became a second sanctuary. Volunteers carried sand and gravel by the bucketful, tied rebar in the heat of the sun, and poured concrete late into the night. Meals were shared on wooden planks, and prayers were lifted from scaffolding as the walls of the new church slowly rose.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6,
+        image: '/bayanihan-7.jpg',
+        imageAlt: 'Youth volunteers smiling together during the construction of the parish church',
+        paragraphs: [
+          'It is a story written not only in stone and steel, but in calloused hands, sun-burnt shoulders, and the joyful faces of young people who chose to build the house of God with their own strength.',
+          'Every column, every beam, every tile of the parish church carries this offering — the Bayanihan of the people of San Antonio de Padua, a living testimony that a church is built first by faith, and then by hands.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.1,
+        image: '/bayanihan-1.jpg',
+        imageAlt: 'Volunteers working together to build the parish church',
+        paragraphs: [
+          'Volunteers of all ages joined hands to help build the parish church, each one contributing their time and effort in the spirit of Bayanihan.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.2,
+        image: '/bayanihan-2.jpg',
+        imageAlt: 'Parishioners carrying construction materials during Bayanihan',
+        paragraphs: [
+          'Carrying construction materials together, parishioners embodied the true meaning of Bayanihan — working as one community for a common goal.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.3,
+        image: '/bayanihan-4.jpg',
+        imageAlt: 'Community Bayanihan at the parish construction site',
+        paragraphs: [
+          'The parish construction site became a place of unity, where everyone — young and old — played a part in building the church.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.4,
+        image: '/bayanihan-5.jpg',
+        imageAlt: 'Parishioners sharing a meal during construction',
+        paragraphs: [
+          'Meals were shared among volunteers, strengthening the bonds of community and making the hard work lighter.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.5,
+        image: '/bayanihan-6.jpg',
+        imageAlt: 'Volunteers mixing cement for the parish church',
+        paragraphs: [
+          'Mixing cement and building together, the volunteers showed that every task, big or small, was important in raising the church.'
+        ]
+      },
+      {
+        chapter: 'Chapter III — Bayanihan: Building the Church Together',
+        pageNumber: 6.6,
+        image: '/bayanihan-8.jpg',
+        imageAlt: 'Parishioners working on the church construction',
+        paragraphs: [
+          'Every moment of Bayanihan was a step toward completing the parish church, a testament to the dedication and faith of the community.'
         ]
       }
     ]
@@ -74,8 +157,8 @@ export const sections: Section[] = [
     dates: '2016 — 2018',
     pages: [
       {
-        chapter: 'Chapter III — Bread, Service, and Formation',
-        pageNumber: 5,
+        chapter: 'Chapter IV — Bread, Service, and Formation',
+        pageNumber: 7,
         image: '/tinapay-project.jpg',
         imageAlt: 'Tinapay de San Antonio parish livelihood project',
         paragraphs: [
@@ -85,8 +168,8 @@ export const sections: Section[] = [
         ]
       },
       {
-        chapter: 'Chapter III — Bread, Service, and Formation',
-        pageNumber: 6,
+        chapter: 'Chapter IV — Bread, Service, and Formation',
+        pageNumber: 8,
         paragraphs: [
           'The parish priest and the people worked side by side to make the parish warm, ordered, and welcoming. New members found catechists ready to help, ministries ready to serve, and a church family ready to receive them.',
           'Over the years, the parish deepened its pastoral care through gatherings for the youth, outreach to families, and the patient ministry of listening that is often invisible but always essential.',
@@ -101,8 +184,8 @@ export const sections: Section[] = [
     dates: '2019 — Present',
     pages: [
       {
-        chapter: 'Chapter IV — A Living Parish',
-        pageNumber: 7,
+        chapter: 'Chapter V — A Living Parish',
+        pageNumber: 9,
         image: '/San_Antonio_de_Padua_Parish_-_Batasan_Hills,_Quezon_City.jpg',
         imageAlt: 'San Antonio de Padua Parish church facade in Batasan Hills, Quezon City',
         paragraphs: [
@@ -112,8 +195,8 @@ export const sections: Section[] = [
         ]
       },
       {
-        chapter: 'Chapter IV — A Living Parish',
-        pageNumber: 8,
+        chapter: 'Chapter V — A Living Parish',
+        pageNumber: 10,
         paragraphs: [
           'The parish also gives witness through its parish priest, lay ministers, and volunteers who care for the spiritual and practical needs of the community. Their service keeps the parish close to the people it serves.',
           'In moments of celebration and in times of difficulty, the parish remains a place of gathering. It is where the people of God come to be nourished, sent forth, and reminded that faith is something lived together.',
