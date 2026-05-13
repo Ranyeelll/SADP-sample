@@ -27,6 +27,10 @@ const links = [
     to: '/contact',
     label: 'Contact',
   },
+  {
+    to: '/office/messages',
+    label: 'Office Inbox',
+  },
 ]
 export function Navbar() {
   const [open, setOpen] = useState(false)
